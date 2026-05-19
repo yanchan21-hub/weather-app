@@ -1,6 +1,14 @@
 import Image from 'next/image';
 import { ForecastItem } from '@/lib/weather';
 
+function getClothingAdvice(temp: number): { emoji: string; text: string } {
+  if (temp >= 25) return { emoji: '👕', text: '半袖でOK' };
+  if (temp >= 20) return { emoji: '👔', text: '長袖シャツや薄手の羽織りがおすすめ' };
+  if (temp >= 15) return { emoji: '🧥', text: '薄手の上着が必要です' };
+  if (temp >= 10) return { emoji: '🧣', text: 'コートやニットがおすすめ' };
+  return { emoji: '🧤', text: '厚手のコート・しっかり防寒対策を' };
+}
+
 interface WeatherCardProps {
   forecast: ForecastItem;
   city: string;
@@ -19,6 +27,7 @@ function formatFullDate(dateStr: string): string {
 }
 
 export default function WeatherCard({ forecast, city, country }: WeatherCardProps) {
+  const clothing = getClothingAdvice(forecast.temp);
   return (
     <article className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-6">
       {/* 都市名・日付 */}
@@ -58,6 +67,15 @@ export default function WeatherCard({ forecast, city, country }: WeatherCardProp
         <StatItem icon="☔" label="降水確率" value={`${forecast.pop}%`} color="text-indigo-500" />
         <StatItem icon="💨" label="風速" value={`${forecast.wind_speed}m/s`} color="text-gray-500" />
       </dl>
+
+      {/* 服装アドバイス */}
+      <div className="mt-5 flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
+        <span className="text-3xl" aria-hidden="true">{clothing.emoji}</span>
+        <div>
+          <p className="text-xs text-amber-600 font-medium mb-0.5">今日の服装アドバイス</p>
+          <p className="text-gray-700 font-semibold text-base">{clothing.text}</p>
+        </div>
+      </div>
     </article>
   );
 }
