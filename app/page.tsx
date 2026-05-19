@@ -19,13 +19,15 @@ export default function Home() {
     setPanelLabel(label);
   };
 
-  // 現在地を自動取得
-  useEffect(() => {
+  const fetchLocation = () => {
     if (!navigator.geolocation) {
       setLoading(false);
       setError('お使いのブラウザは現在地取得に対応していません。');
       return;
     }
+    setLoading(true);
+    setError(null);
+    setWeather(null);
     navigator.geolocation.getCurrentPosition(
       async ({ coords }) => {
         try {
@@ -49,7 +51,10 @@ export default function Home() {
       },
       { timeout: 10000 }
     );
-  }, []);
+  };
+
+  // 現在地を自動取得
+  useEffect(() => { fetchLocation(); }, []);
 
   // 都市検索 → 左パネルに表示
   const handleSearch = async (city: string) => {
@@ -139,6 +144,16 @@ export default function Home() {
               <span aria-hidden="true">🔍</span> 都市を検索
             </h2>
             <CitySearch onSearch={handleSearch} loading={loading} />
+
+            <button
+              type="button"
+              onClick={fetchLocation}
+              disabled={loading}
+              className="w-full flex items-center justify-center gap-2 py-3 text-base font-medium text-white border border-white/40 rounded-xl hover:bg-white/10 active:bg-white/20 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              <span aria-hidden="true">📍</span>
+              現在地の天気を見る
+            </button>
           </section>
 
         </div>
