@@ -5,7 +5,6 @@ import { COUNTRIES } from '@/lib/cities';
 
 interface CitySearchProps {
   onSearch: (city: string) => void;
-  onGetLocation: () => void;
   loading: boolean;
 }
 
@@ -29,7 +28,7 @@ const selectClass =
   'appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-white/80 ' +
   'disabled:opacity-50 disabled:cursor-not-allowed';
 
-export default function CitySearch({ onSearch, onGetLocation, loading }: CitySearchProps) {
+export default function CitySearch({ onSearch, loading }: CitySearchProps) {
   // ── プルダウン用ステート ──────────────────────────
   const [countryIdx, setCountryIdx] = useState('');
   const [cityValue, setCityValue] = useState('');
@@ -154,17 +153,6 @@ export default function CitySearch({ onSearch, onGetLocation, loading }: CitySea
           </button>
         </form>
       </div>
-
-      {/* ── 現在地ボタン ── */}
-      <button
-        type="button"
-        onClick={onGetLocation}
-        disabled={loading}
-        className="w-full flex items-center justify-center gap-2 py-3 text-base font-medium text-white border border-white/40 rounded-xl hover:bg-white/10 active:bg-white/20 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-      >
-        <span aria-hidden="true">📍</span>
-        現在地の天気を見る
-      </button>
 
     </div>
   );
