@@ -139,21 +139,23 @@ export default function Home() {
           </section>
 
           {/* ── 右（下）：検索パネル ───────────────────── */}
-          <section className="w-full md:w-1/2 space-y-4">
-            <h2 className="text-white font-bold text-lg flex items-center gap-2">
-              <span aria-hidden="true">🔍</span> 都市を検索
-            </h2>
-            <CitySearch onSearch={handleSearch} loading={loading} />
+          <section className="w-full md:w-1/2">
+            <div className="md:sticky md:top-6 space-y-4">
+              <h2 className="text-white font-bold text-lg flex items-center gap-2">
+                <span aria-hidden="true">🔍</span> 都市を検索
+              </h2>
+              <CitySearch onSearch={handleSearch} loading={loading} />
 
-            <button
-              type="button"
-              onClick={fetchLocation}
-              disabled={loading}
-              className="w-full flex items-center justify-center gap-2 py-3 text-base font-medium text-white border border-white/40 rounded-xl hover:bg-white/10 active:bg-white/20 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-            >
-              <span aria-hidden="true">📍</span>
-              現在地の天気を見る
-            </button>
+              <button
+                type="button"
+                onClick={fetchLocation}
+                disabled={loading}
+                className="w-full flex items-center justify-center gap-2 py-3 text-base font-medium text-white border border-white/40 rounded-xl hover:bg-white/10 active:bg-white/20 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                <span aria-hidden="true">📍</span>
+                現在地の天気を見る
+              </button>
+            </div>
           </section>
 
         </div>
