@@ -27,7 +27,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: '予報データがありません' }, { status: 500 });
   }
 
-  if (today.pop < 50) {
+  const force = request.nextUrl.searchParams.get('force') === 'true';
+  if (!force && today.pop < 50) {
     return NextResponse.json({ sent: false, reason: '降水確率50%未満のため通知なし', pop: today.pop });
   }
 
