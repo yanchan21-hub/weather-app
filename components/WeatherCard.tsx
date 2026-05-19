@@ -9,6 +9,12 @@ function getClothingAdvice(temp: number): { emoji: string; text: string } {
   return { emoji: '🧤', text: '厚手のコート・しっかり防寒対策を' };
 }
 
+function getUmbrellaAdvice(pop: number): { emoji: string; text: string } {
+  if (pop >= 50) return { emoji: '☂️', text: '傘を持っていきましょう' };
+  if (pop >= 30) return { emoji: '🌂', text: '折りたたみ傘があると安心' };
+  return { emoji: '🌤️', text: '傘なしでも大丈夫そう' };
+}
+
 function getOutingScore(temp: number, pop: number, icon: string): { stars: number; label: string } {
   const isSunny = icon.startsWith('01') || icon.startsWith('02');
   const isComfortableTemp = temp >= 15 && temp <= 28;
@@ -40,6 +46,7 @@ function formatFullDate(dateStr: string): string {
 
 export default function WeatherCard({ forecast, city, country }: WeatherCardProps) {
   const clothing = getClothingAdvice(forecast.temp);
+  const umbrella = getUmbrellaAdvice(forecast.pop);
   const outing = getOutingScore(forecast.temp, forecast.pop, forecast.icon);
   return (
     <article className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-4">
@@ -79,24 +86,25 @@ export default function WeatherCard({ forecast, city, country }: WeatherCardProp
         <StatItem icon="💨" label="風速" value={`${forecast.wind_speed}m/s`} color="text-gray-500" />
       </dl>
 
-      {/* 服装アドバイス・お出かけおすすめ度（横並び） */}
-      <div className="mt-3 grid grid-cols-2 gap-2">
-        <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-xl px-3 py-2">
-          <span className="text-2xl shrink-0" aria-hidden="true">{clothing.emoji}</span>
-          <div className="min-w-0">
-            <p className="text-xs text-amber-600 font-medium">服装アドバイス</p>
-            <p className="text-gray-700 font-semibold text-xs leading-snug">{clothing.text}</p>
-          </div>
+      {/* 服装アドバイス・傘アドバイス・お出かけおすすめ度（横並び） */}
+      <div className="mt-3 grid grid-cols-3 gap-2">
+        <div className="flex flex-col gap-1 bg-amber-50 border border-amber-200 rounded-xl px-2 py-2">
+          <span className="text-xl" aria-hidden="true">{clothing.emoji}</span>
+          <p className="text-xs text-amber-600 font-medium leading-none">服装</p>
+          <p className="text-gray-700 font-semibold text-xs leading-snug">{clothing.text}</p>
         </div>
-        <div className="flex items-center gap-2 bg-sky-50 border border-sky-200 rounded-xl px-3 py-2">
-          <span className="text-2xl shrink-0" aria-hidden="true">🏃</span>
-          <div className="min-w-0">
-            <p className="text-xs text-sky-600 font-medium">お出かけ度</p>
-            <p className="text-yellow-400 text-base leading-none tracking-wide" aria-label={`${outing.stars}点 / 5点`}>
-              {'★'.repeat(outing.stars)}{'☆'.repeat(5 - outing.stars)}
-            </p>
-            <p className="text-gray-600 text-xs leading-snug mt-0.5">{outing.label}</p>
-          </div>
+        <div className="flex flex-col gap-1 bg-blue-50 border border-blue-200 rounded-xl px-2 py-2">
+          <span className="text-xl" aria-hidden="true">{umbrella.emoji}</span>
+          <p className="text-xs text-blue-600 font-medium leading-none">傘</p>
+          <p className="text-gray-700 font-semibold text-xs leading-snug">{umbrella.text}</p>
+        </div>
+        <div className="flex flex-col gap-1 bg-sky-50 border border-sky-200 rounded-xl px-2 py-2">
+          <span className="text-xl" aria-hidden="true">🏃</span>
+          <p className="text-xs text-sky-600 font-medium leading-none">お出かけ度</p>
+          <p className="text-yellow-400 text-sm leading-none tracking-wide" aria-label={`${outing.stars}点 / 5点`}>
+            {'★'.repeat(outing.stars)}{'☆'.repeat(5 - outing.stars)}
+          </p>
+          <p className="text-gray-600 text-xs leading-snug">{outing.label}</p>
         </div>
       </div>
     </article>
